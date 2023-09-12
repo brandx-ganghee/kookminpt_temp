@@ -4,6 +4,7 @@ import 'package:flutter_kookminpt_sample/src/data/datasource/remote/gathering_ap
 import 'package:flutter_kookminpt_sample/src/data/repository/gathering_repository_impl.dart';
 import 'package:flutter_kookminpt_sample/src/domain/repository/gathering_repository.dart';
 import 'package:flutter_kookminpt_sample/src/domain/use_case/get_gathering_category_use_case.dart';
+import 'package:flutter_kookminpt_sample/src/domain/use_case/get_gathering_items_use_case.dart';
 import 'package:flutter_kookminpt_sample/src/presentation/cubit/gathering_category/gathering_category_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,4 +25,5 @@ Future<void> initializeDependencies() async {
   );
 
   locator.registerLazySingleton(() => GetGatheringCategoryUseCase(locator()));
+  locator.registerLazySingleton(() => GetGatheringItemsUseCase(locator()));
 }

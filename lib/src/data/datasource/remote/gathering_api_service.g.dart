@@ -51,6 +51,72 @@ class _GatheringApiService implements GatheringApiService {
     return httpResponse;
   }
 
+  @override
+  Future<HttpResponse<GatheringItems>> getGatheringItems(
+    int? offset,
+    double? latitude,
+    String? sort,
+    int? gatheringCategory,
+    String? gatheringExerciseList,
+    String? isRecruitGathering,
+    String? gatheringRegionList,
+    String? gender,
+    int? pageSize,
+    String? sortType,
+    int? page,
+    double? longitude,
+    int? gatheringId,
+    int? gatheringMinAge,
+    int? gatheringMaxAge,
+    String? startDate,
+    String? endDate,
+    String? onlyTrainer,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'offset': offset,
+      r'latitude': latitude,
+      r'sort': sort,
+      r'groupCategorySeq': gatheringCategory,
+      r'groupExerciseList': gatheringExerciseList,
+      r'groupRecruitStatus': isRecruitGathering,
+      r'groupRegionList': gatheringRegionList,
+      r'groupMemberGender': gender,
+      r'size': pageSize,
+      r'sortType': sortType,
+      r'page': page,
+      r'longitude': longitude,
+      r'groupSeq': gatheringId,
+      r'groupMemberMinAge': gatheringMinAge,
+      r'groupMemberMaxAge': gatheringMaxAge,
+      r'startDate': startDate,
+      r'endDate': endDate,
+      r'groupMemberOnlyTrainer': onlyTrainer,
+    };
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<GatheringItems>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v2/groups',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = GatheringItems.fromJson(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

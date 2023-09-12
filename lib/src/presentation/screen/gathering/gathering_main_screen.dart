@@ -2,13 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_kookminpt_sample/src/presentation/cubit/gathering_category/gathering_category_state.dart';
+import 'package:flutter_kookminpt_sample/src/presentation/cubit/gathering_items/gathering_items_cubit.dart';
 import 'package:flutter_kookminpt_sample/src/theme/colors.dart';
 import 'package:flutter_kookminpt_sample/src/theme/text_style.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../domain/model/gathering/gathering_category.dart';
+import '../../../domain/model/gathering/gathering_item.dart';
 import '../../cubit/gathering_category/gathering_category_cubit.dart';
+import '../../cubit/gathering_items/gathering_items_state.dart';
+import 'gathering_item.dart';
 
 @RoutePage()
 class GatheringMainScreen extends StatelessWidget {
@@ -16,17 +19,24 @@ class GatheringMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final remoteGatheringCategoryCubit =
+        BlocProvider.of<GatheringCategoryCubit>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('운동모임')),
-      body: BlocBuilder<GatheringCubit, GatheringState>(
+      body: BlocBuilder<GatheringItemsCubit, GatheringItemsState>(
         builder: (_, state) {
           switch (state.runtimeType) {
-            case RemoteGatheringLoading:
+            case RemoteGatheringsLoading:
               return const Center(child: CupertinoActivityIndicator());
-            case RemoteGatheringFailed:
+            case RemoteGatheringsFailed:
               return const Center(child: Icon(Icons.refresh));
-            case RemoteGatheringSuccess:
-              return _gatheringView(state.gatheringCategories);
+            case RemoteGatheringsSuccess:
+              return _gatheringView(
+                  categories:
+                      remoteGatheringCategoryCubit.state.gatheringCategories,
+                  gatheringItems:
+                      state.gatheringItems?.pageRows ?? List.empty());
             default:
               return const SizedBox();
           }
@@ -35,14 +45,29 @@ class GatheringMainScreen extends StatelessWidget {
     );
   }
 
-  Widget _gatheringView(List<GatheringCategory> categories) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(child: _categoryList(categories)),
-        const SliverToBoxAdapter(child: SizedBox(height: 24)),
-        SliverToBoxAdapter(child: _filterView()),
-      ],
-    );
+  Widget _gatheringView(
+      {required List<GatheringCategory> categories,
+      required List<GatheringItem> gatheringItems}) {
+    return CustomScrollView(slivers: [
+      SliverToBoxAdapter(child: _categoryList(categories)),
+      const SliverToBoxAdapter(child: SizedBox(height: 24)),
+      SliverToBoxAdapter(child: _filterView()),
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (context, index) => Padding(
+                  padding:
+                      const EdgeInsets.only(right: 20, left: 20, bottom: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (index == 0) const SizedBox(height: 20),
+                      GatheringItemView(gatheringItem: gatheringItems[index]),
+                    ],
+                  ),
+                ),
+            childCount: gatheringItems.length),
+      )
+    ]);
   }
 
   Widget _categoryList(List<GatheringCategory> categories) {

@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_kookminpt_sample/src/domain/model/gathering/gathering_category.dart';
 
-abstract class GatheringState {
+abstract class GatheringCategoryState {
   final List<GatheringCategory> gatheringCategories;
   final DioException? error;
 
-  const GatheringState({
+  const GatheringCategoryState({
     this.gatheringCategories = const [],
     this.error,
   });
@@ -15,14 +15,14 @@ abstract class GatheringState {
   List<Object?> get props => [gatheringCategories, error];
 }
 
-class RemoteGatheringLoading extends GatheringState {
-  const RemoteGatheringLoading();
+class RemoteGatheringCategoryLoading extends GatheringCategoryState {
+  const RemoteGatheringCategoryLoading();
 }
 
-class RemoteGatheringSuccess extends GatheringState {
-  const RemoteGatheringSuccess({super.gatheringCategories});
+class RemoteGatheringCategorySuccess extends GatheringCategoryState {
+  const RemoteGatheringCategorySuccess({super.gatheringCategories});
 }
 
-class RemoteGatheringFailed extends GatheringState {
-  const RemoteGatheringFailed({super.error});
+class RemoteGatheringCategoryFailed extends GatheringCategoryState {
+  const RemoteGatheringCategoryFailed({super.error});
 }

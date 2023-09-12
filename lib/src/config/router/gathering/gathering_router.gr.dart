@@ -102,6 +102,7 @@ class GatheringMainRouter extends PageRouteInfo<void> {
   static const PageInfo<void> page = PageInfo<void>(name);
 }
 
+
 /// generated route for
 /// [HomeScreen]
 class HomeRouter extends PageRouteInfo<void> {

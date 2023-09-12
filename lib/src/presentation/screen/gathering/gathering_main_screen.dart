@@ -39,6 +39,7 @@ class GatheringMainScreen extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(child: _categoryList(categories)),
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
         SliverToBoxAdapter(child: _filterView()),
       ],
     );
@@ -107,7 +108,28 @@ class GatheringMainScreen extends StatelessWidget {
             },
             child: Row(
               children: [
-
+                SvgPicture.asset("assets/icons/ic_filter.svg"),
+                const SizedBox(width: 4),
+                const Text(
+                  "필터",
+                  style: KookminTextStyle.subtitle3,
+                )
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () => {
+              // todo: sort click
+              print('정렬 클릭 이벤트')
+            },
+            child: Row(
+              children: [
+                const Text(
+                  "최신순",
+                  style: KookminTextStyle.subtitle3,
+                ),
+                const SizedBox(width: 4),
+                SvgPicture.asset("assets/icons/ic_sort.svg")
               ],
             ),
           )
